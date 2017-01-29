@@ -10,7 +10,8 @@
 
     <!--Description-->
     
-        <meta name="description" content="NOTE: This post is only getting written because I couldn’t find a reliable and up to date guide for creating public NuGet packages for the current sta">
+        <meta name="description" content="If you want a condensed version, head over to the tl;dr version of this post
+So you’ve got some code you think would be helpful to your community. Or ">
     
 
     <!--Author-->
@@ -191,7 +192,8 @@
 
             <!-- Post Main Content -->
             <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                <h5 id="NOTE-This-post-is-only-getting-written-because-I-couldn’t-find-a-reliable-and-up-to-date-guide-for-creating-public-NuGet-packages-for-the-current-state-of-NET-Core-tooling-I’ll-do-my-best-to-either-update-this-or-delete-it-when-it-becomes-irrelevant-in-order-to-prevent-the-confusion-that-made-this-a-little-difficult-for-me"><a href="#NOTE-This-post-is-only-getting-written-because-I-couldn’t-find-a-reliable-and-up-to-date-guide-for-creating-public-NuGet-packages-for-the-current-state-of-NET-Core-tooling-I’ll-do-my-best-to-either-update-this-or-delete-it-when-it-becomes-irrelevant-in-order-to-prevent-the-confusion-that-made-this-a-little-difficult-for-me" class="headerlink" title="NOTE: This post is only getting written because I couldn’t find a reliable and up to date guide for creating public NuGet packages for the current state of .NET Core tooling. I’ll do my best to either update this or delete it when it becomes irrelevant in order to prevent the confusion that made this a little difficult for me."></a><em>NOTE: This post is only getting written because I couldn’t find a reliable and up to date guide for creating public NuGet packages for the current state of .NET Core tooling. I’ll do my best to either update this or delete it when it becomes irrelevant in order to prevent the confusion that made this a little difficult for me.</em></h5><p>So you’ve got some code you think would be helpful to your community. Or maybe you just want to save yourself the hassle of managing bits of code that you frequently use in your projects.</p>
+                <p><em>If you want a condensed version, head over to the <a href="/2017/01/29/Publishing-NET-Core-NuGet-Packages-tl-dr/">tl;dr version of this post</a></em></p>
+<p>So you’ve got some code you think would be helpful to your community. Or maybe you just want to save yourself the hassle of managing bits of code that you frequently use in your projects.</p>
 <p>Thankfully, you have available to you the same mechanism that all your favorite dependencies use to distribute and retrieve packages: <strong>NuGet</strong>.</p>
 <h2 id="About-NuGet"><a href="#About-NuGet" class="headerlink" title="About NuGet"></a>About NuGet</h2><p>NuGet is a package manager which is used for various things such as <a href="https://chocolatey.org/" target="_blank" rel="external">Windows software</a> and <a href="https://octopus.com/" target="_blank" rel="external">deployment packaging</a>, but is primarily used by .NET developers for packaging and managing code libraries.</p>
 <p>Developers have the ability to turn their software (typically class libraries) into NuGet packages (<code>*.nupkg</code>), publish those packages to a NuGet repository (<a href="https://www.nuget.org/" target="_blank" rel="external">https://www.nuget.org/</a> or their own private repositories), and have other developers reference the packages in their own projects.</p>
