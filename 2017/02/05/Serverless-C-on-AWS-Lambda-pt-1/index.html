@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="This is a multi-part series on using C#, AWS Lambda, and Serverless Framework to build REST services, ChatBots, Alexa Skills and more
+You might have h">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Ryan Stelly">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Serverless C# on AWS Lambda (pt. 1)"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="Thing Repository"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+        <meta name="twitter:site" content="ryanastelly>" />
+    
+
+    <!-- Title -->
+    
+    <title>Serverless C# on AWS Lambda (pt. 1) - Thing Repository</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-91013388-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <!-- favicon -->
+    
+    <link rel="icon" href="/images/ico.png">
+    
+	
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Thing Repository</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/FLGMwt">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('/images/hero.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1><span class="post-heading-text-background">Serverless C# on AWS Lambda (pt. 1)</span></h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        <span class="post-heading-text-background">2017-02-05</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p><em>This is a multi-part series on using C#, AWS Lambda, and Serverless Framework to build REST services, ChatBots, Alexa Skills and more</em></p>
+<p>You might have heard that back in December, <a href="AWS Lambda added support for C#">https://aws.amazon.com/blogs/compute/announcing-c-sharp-support-for-aws-lambda/</a>. Welcome to the club, fellow .NET developer! AWS Lambda is the logical conclusion of the move from Infrastructure-as-a-Service to Platform-as-a-Service to Containers-as-a-Service to what we’re going to be dealing with: Functions-as-a-Service (often referred to as Serverless).</p>
+<p>Serverless applications offer a number of benefits such as ease of deployment, effortless scalability, and cost elasticity (you only pay for when your service is used). Because the pros and cons of serverless applications have been discussed at length, I’ll leave the analysis to <a href="https://martinfowler.com/articles/serverless.html" target="_blank" rel="external">those much smarter than I</a> and stick to a guide.</p>
+<p>That said, if your functions are itching to get up in the cloud, let’s get started.</p>
+<h1 id="Setup"><a href="#Setup" class="headerlink" title="Setup"></a>Setup</h1><p>First, we’ll need the <a href="https://serverless.com/" target="_blank" rel="external">Serverless Framework</a> tools which will help us create and deploy functions. You can install it via npm as follows (if you don’t have node or npm, <a href="https://nodejs.org/en/" target="_blank" rel="external">install them here</a>:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">npm install --global serverless</div></pre></td></tr></table></figure>
+<p><strong>Note</strong>: While it’s certainly possible to manage Lambda functions and applications using just the console or raw <a href="https://aws.amazon.com/cloudformation/" target="_blank" rel="external">CloudFormation</a>, Serverless Framework is a popular option for managing and deploying functions, not least of all because it simplifies management of infrastructure as code. Throughout this series, we’ll see the power of that.</p>
+<p>Before we can do much with <code>serverless</code>, we need to configure the credentials for the AWS user that will be managing functions, S3 objects, and other AWS resources on our behalf. The steps for creating one are as follows:</p>
+<ol>
+<li>Log in to your AWS console</li>
+<li>Navigate to the IAM service<ul>
+<li>Identity and Access Management (IAM) is where you manage users, groups, roles, and policies (permissions of sorts) for your AWS account</li>
+</ul>
+</li>
+<li>Click “Users” and then “Add user”</li>
+<li>Give your user a name, such as <code>serverless-tutorial</code></li>
+<li>For access type, check “Programmatic access”</li>
+<li>On the “Permissions” step, select, “Attach existing policies directly”</li>
+<li>Search for and select the “AdministratorAccess” policy</li>
+<li>Click “Next: Review” and then “Create User”</li>
+<li>Your user is now created but <strong>don’t leave this page yet</strong></li>
+</ol>
+<p>Your new user has an access key and a secret key associated with it that are used to authenticate and authorize actions on your account. You’re only able to access the secret key on this page and if you don’t grab it now, you’ll have to generate a new set of keys.</p>
+<p>Now we’re going to copy both keys into a serverless command that sets up your new credentials on your machine:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">serverless config credentials --provider aws --key &lt;YOUR_ACCESS_KEY&gt; --secret &lt;YOUR_SECRET_KEY&gt;</div></pre></td></tr></table></figure>
+<p>Great! The <code>serverless</code> command now can act on behalf of the <code>serverless-tutorial</code> user we created and we’re able to get started creating and deploying functions.</p>
+<h1 id="Your-First-Function"><a href="#Your-First-Function" class="headerlink" title="Your First Function"></a>Your First Function</h1><p>The <code>serverless</code> command allows you to create functions from templates for the different languages that AWS Lambda supports, such as nodejs, python, Java, Scala, and our friend C#. Create a new C# Serverless project like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">serverless create --template aws-csharp --path serverless-tutorial</div></pre></td></tr></table></figure>
+<p>A new directory named <code>serverless-tutorial</code> has been created with some interesting files in it. <code>cd</code> there and we’ll take a look at each one.</p>
+<h2 id="C-Serverless-Project-Structure"><a href="#C-Serverless-Project-Structure" class="headerlink" title="C# Serverless Project Structure"></a>C# Serverless Project Structure</h2><h3 id="serverless-yml"><a href="#serverless-yml" class="headerlink" title="serverless.yml"></a><code>serverless.yml</code></h3><p>This file contains all of the metadata about your Serverless service so that the <code>serverless</code> command knows how to wire everything up in AWS. You’ll notice that the provided template has a lot of commented out examples. If we pull those out, we’ll see that the default template provides this for you:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="attr">service:</span> serverless-tutorial</div></pre></td></tr></table></figure>
+<p>This is simply the name of your service. Since we provided <code>serverless-tutorial</code> as the terminal directory in the <code>--path</code> argument of <code>serverless create</code>, our service is named that by default.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">provider:</span></div><div class="line"><span class="attr">  name:</span> aws</div><div class="line"><span class="attr">  runtime:</span> dotnetcore1<span class="number">.0</span></div></pre></td></tr></table></figure>
+<p>This block declares the cloud provider as AWS. Serverles Framework currently only supports AWS, but since many cloud providers offer similar serverless options, this could expand.</p>
+<p>The <code>runtime</code> property states that the runtime for our function will be .NET Core 1.0. AWS Lambda supports NodeJS, Python, JVM-based languages, and .NET Core-based languages.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">package:</span></div><div class="line"><span class="attr"> artifact:</span> bin/release/netcoreapp1<span class="number">.0</span>/publish/deploy-package.zip</div></pre></td></tr></table></figure>
+<p>The <code>artifact</code> property of the <code>package</code> block determines the path to our bundled function code on our local workstation. We’ll see later how the build scripts generate this package. On deploy, this file will be published to AWS S3 and the Lambda will be pointed at it.</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">functions:</span></div><div class="line"><span class="attr">  hello:</span></div><div class="line"><span class="attr">    handler:</span> CsharpHandlers::AwsDotnetCsharp.Handler::Hello</div></pre></td></tr></table></figure>
+<p>The <code>functions</code> block lists all of our functions. We only have one created by the template: the <code>hello</code> function.</p>
+<p>With the <code>handler</code> property, each function points to a specific method in our C# code which will take the initial input to the Lambda and return the final output from the Lambda. The syntax for this value is as follows: <code>{assembly name}::{namespace}.{class name}  ::{method name}</code></p>
+<p>Taken altogether, when this serverless is deployed, the <code>serverless.yml</code> instructs the <code>serverless</code> CLI to create a stack called <code>serverless-tutorial</code>, which is on the .NET Core runtime. The service’s code will live in a package located at <code>bin/Release/netcoreapp1.0/publish/deploy-package.zip</code> on the local workstation which will be pushed to AWS S3. Included in this package is the C# method <code>Hello</code> in the <code>AwsDotnetCsharp.Handler</code> namespace which will handle all calls to the <code>hello</code> AWS Lambda function.</p>
+<h3 id="Handler-cs"><a href="#Handler-cs" class="headerlink" title="Handler.cs"></a><code>Handler.cs</code></h3><p>This C# code file contains the handler for our first function, the <code>Hello</code> method. Most importantly, we see that it takes in a single object of type <code>Request</code> which is defined as a POCO later in the file. It’s only line of implementation is to return an object of type <code>Response</code> which is also defined later in the file which takes a <code>string</code> message and an echo of the request.</p>
+<p>Something to note here is that there is no <code>System.Web</code> reference nor any semblance of a framework. A serverless function’s job is to very directly take in raw data and return raw data.</p>
+<h3 id="AssemblyInfo-cs"><a href="#AssemblyInfo-cs" class="headerlink" title="AssemblyInfo.cs"></a><code>AssemblyInfo.cs</code></h3><p>This file provides an attribute for the assembly as a whole, defining the serializer class that should be used for deserializing incoming streams and deserializing outgoing data into streams.</p>
+<p>You shouldn’t need to worry about this too much, we’ll be revisiting it in the REST function post.</p>
+<h3 id="build-sh-and-build-ps1"><a href="#build-sh-and-build-ps1" class="headerlink" title="build.sh and build.ps1"></a><code>build.sh</code> and <code>build.ps1</code></h3><p>These files handle the packaging of our code in preparation for <code>serverless</code> deploying it.</p>
+<p>Each file does the following:</p>
+<ul>
+<li>restores packages</li>
+<li>publishes the project to the <code>bin/release/netcoreapp1.0/publish</code> directory</li>
+<li>zips up the build artifacts as <code>deploy-package.zip</code></li>
+</ul>
+<h3 id="project-json"><a href="#project-json" class="headerlink" title="project.json"></a><code>project.json</code></h3><p>This is the .NET Core project file which contains information about the C# code such as:</p>
+<ul>
+<li>package metadata (assembly name, version, etc.)</li>
+<li>dependencies</li>
+<li>target frameworks</li>
+</ul>
+<p>We don’t have to worry about this much until the next post.</p>
+<h2 id="Deploying-Our-Function"><a href="#Deploying-Our-Function" class="headerlink" title="Deploying Our Function"></a>Deploying Our Function</h2><p>By now, we know enough about what’s included in the default <code>aws-csharp</code> Serverless Framework template. Let’s build and deploy it and see what happens!</p>
+<p>Run the following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./build.ps1</div><div class="line">serverless deploy</div></pre></td></tr></table></figure>
+<p>or (depending on your system)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./build.sh</div><div class="line">serverless deploy</div></pre></td></tr></table></figure></p>
+<p>After a few minutes, you should get some output like this:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">Service Information</div><div class="line">service: serverless-tutorial</div><div class="line">stage: dev</div><div class="line">region: us-east-1</div><div class="line">api keys:</div><div class="line">  None</div><div class="line">endpoints:</div><div class="line">  None</div><div class="line">functions:</div><div class="line">  serverless-tutorial-dev-hello: arn:aws:lambda:us-east-1:1937231523426:function:serverless-tutorial-dev-hello</div></pre></td></tr></table></figure>
+<p>This means your deploy was successful! Also note that you can get this same output at any time by running <code>serverless info</code>. If you log into your AWS console, you should see your new function in the functions list. If you don’t, make sure you select the same region in the dropdown at the top right of your console as the region listed in the <code>Service Information</code> output.</p>
+<h2 id="Testing-Our-Function"><a href="#Testing-Our-Function" class="headerlink" title="Testing Our Function"></a>Testing Our Function</h2><p>Now that we’ve got some code, let’s see it in action. Run the following:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">serverless invoke -f hello</div></pre></td></tr></table></figure>
+<p>This sends a body-less request to our function. The output will look something like this:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"Message"</span>: <span class="string">"Go Serverless v1.0! Your function executed successfully!"</span>,</div><div class="line">    <span class="attr">"Request"</span>: &#123;</div><div class="line">        <span class="attr">"Key1"</span>: <span class="literal">null</span>,</div><div class="line">        <span class="attr">"Key2"</span>: <span class="literal">null</span>,</div><div class="line">        <span class="attr">"Key3"</span>: <span class="literal">null</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Neat! We know that <code>Hello</code> returned a <code>Response</code> object with the property <code>Message</code> which was assigned with the default string in <code>Hello</code>‘s call to <code>Response</code>‘s constructor. We didn’t provide a request body with properties <code>Key1</code>, <code>Key2</code>, or <code>Key3</code>, so those items are null.</p>
+<h2 id="Customizing-the-Response"><a href="#Customizing-the-Response" class="headerlink" title="Customizing the Response"></a>Customizing the Response</h2><p>We got the default template running, but that’s not a great deal of fun. Try changing the message string in <code>Handler</code> to a message of your own:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">return</span> <span class="keyword">new</span> Response(<span class="string">"Thanks for reading the first part of this series!"</span>, request);</div></pre></td></tr></table></figure>
+<p>Remember, <code>serverless</code> deploys our code from <code>deploy-package.zip</code>, but since we changed the source, we need to rebuild the package. Again, run:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./build.ps1</div><div class="line">serverless deploy</div></pre></td></tr></table></figure>
+<p>or (depending on your system)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./build.sh</div><div class="line">serverless deploy</div></pre></td></tr></table></figure></p>
+<p>Now try <code>serverless invoke -f hello</code> and you should see your custom message:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    <span class="attr">"Message"</span>: <span class="string">"Thanks for reading the first part of this series!"</span>,</div><div class="line">    <span class="attr">"Request"</span>: &#123;</div><div class="line">        <span class="attr">"Key1"</span>: <span class="literal">null</span>,</div><div class="line">        <span class="attr">"Key2"</span>: <span class="literal">null</span>,</div><div class="line">        <span class="attr">"Key3"</span>: <span class="literal">null</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Well done! Next post, I’ll cover triggering your function with an HTTP request. Microservices, here we come!</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                        <li>
+                            <a href="https://twitter.com/ryanastelly" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/FLGMwt" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2017 Ryan Stelly<br></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
