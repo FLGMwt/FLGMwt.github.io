@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Head tag -->
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!--Description-->
+    
+        <meta name="description" content="This is a multi-part series on using C#, AWS Lambda, and Serverless Framework to build REST services, ChatBots, Alexa Skills and more
+This week, we’ll">
+    
+
+    <!--Author-->
+    
+        <meta name="author" content="Ryan Stelly">
+    
+
+    <!--Open Graph Title-->
+    
+        <meta property="og:title" content="Serverless C# on AWS Lambda (pt. 2)"/>
+    
+
+    <!--Open Graph Description-->
+    
+
+    <!--Open Graph Site Name-->
+    <meta property="og:site_name" content="Thing Repository"/>
+
+    <!--Type page-->
+    
+        <meta property="og:type" content="article" />
+    
+
+    <!--Page Cover-->
+    
+
+        <meta name="twitter:card" content="summary" />
+    
+        <meta name="twitter:site" content="ryanastelly>" />
+    
+
+    <!-- Title -->
+    
+    <title>Serverless C# on AWS Lambda (pt. 2) - Thing Repository</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/style.css">
+
+    <!-- Custom Fonts -->
+    <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" rel="stylesheet" type="text/css">
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel="stylesheet" type="text/css">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="//oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="//oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+    <!-- Gallery -->
+    <link href="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.css" type="text/css" rel="stylesheet" />
+
+    <!-- Google Analytics -->
+    
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+        ga('create', 'UA-91013388-1', 'auto');
+        ga('send', 'pageview');
+
+    </script>
+
+
+
+    <!-- favicon -->
+    
+    <link rel="icon" href="/images/ico.png">
+    
+	
+</head>
+
+
+<body>
+
+    <!-- Menu -->
+    <!-- Navigation -->
+<nav class="navbar navbar-default navbar-custom navbar-fixed-top">
+    <div class="container-fluid">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header page-scroll">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="/">Thing Repository</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav navbar-right">
+                
+                    <li>
+                        <a href="/">
+                            
+                                Home
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="/archives">
+                            
+                                Archives
+                            
+                        </a>
+                    </li>
+                
+                    <li>
+                        <a href="https://github.com/FLGMwt">
+                            
+                                <i class="fa fa-github fa-stack-2x"></i>
+                            
+                        </a>
+                    </li>
+                
+            </ul>
+        </div>
+        <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container -->
+</nav>
+
+    <!-- Main Content -->
+    <!-- Page Header -->
+<!-- Set your background image for this header in your post front-matter: cover -->
+
+<header class="intro-header" style="background-image: url('/images/hero.jpg')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <div class="post-heading">
+                    <h1><span class="post-heading-text-background">Serverless C# on AWS Lambda (pt. 2)</span></h1>
+                    
+                    <span class="meta">
+                        <!-- Date and Author -->
+                        
+                        <span class="post-heading-text-background">2017-02-11</span>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Post Content -->
+<article>
+    <div class="container">
+        <div class="row">
+
+            <!-- Tags and categories -->
+           
+
+            <!-- Gallery -->
+            
+
+            <!-- Post Main Content -->
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p><em>This is a multi-part series on using C#, AWS Lambda, and Serverless Framework to build REST services, ChatBots, Alexa Skills and more</em></p>
+<p>This week, we’ll explore creating HTTP endpoints that execute your Lambda functions. I’ll assume that you have the starter template from the <a href="/2017/02/05/Serverless-C-on-AWS-Lambda-pt-1/">first post</a>.</p>
+<h1 id="Events-and-Triggers"><a href="#Events-and-Triggers" class="headerlink" title="Events and Triggers"></a>Events and Triggers</h1><p>Up until now, our function has lived in relative isolation. The only way we’ve been able to call the <code>hello</code> function has been using <code>serverless invoke</code> which translates to a direct AWS API call, or by using the AWS console to test the function directly. Unsurprisingly, these are not the intended interaction models for AWS Lambda functions.</p>
+<p>In AWS Lambda services, your functions will typically execute in response to various types of events. These can be things such as “a file was uploaded to S3”, “a server crashed”, “an item was added to your DynamoDB database”, or even “an HTTP request was made to this API Gateway endpoint”. In this post, you’ll see how you can configure respond to the latter, an HTTP endpoint.</p>
+<h1 id="API-Gateway"><a href="#API-Gateway" class="headerlink" title="API Gateway"></a>API Gateway</h1><p>Because Lambda functions can be triggered by many types of events, it’s worthwhile to highlight that neither the AWS Lambda infrastructure nor your function are aware of networking or HTTP. Functions simply take in a stream of data and output a stream of data (though as we’ll see, serialization plays a part in simplifying this interface). The event sources determine the schema of the input data they provide to the function as well as the output schema they expect back from the function (if any).</p>
+<p>The event source used for responding to HTTP events is AWS’s API Gateway. API Gateway is a service for exposing HTTP endpoints that map to any number of your AWS resources that you want those endpoints to execute. In our case, we’ll be triggering AWS Lambda functions and returning their output.</p>
+<p>The lifecycle of a web request looks roughly like this:</p>
+<ol>
+<li>A client makes a <code>GET</code> request to <code>/helloworld</code> which is configured a API Gateway endpoint</li>
+<li>The <code>GET</code> method for the <code>/helloworld</code> resource is mapped to the <code>hello</code> Lambda function</li>
+<li>API Gateway wraps up data about the <code>GET</code> request in a json payload which contains the headers, HTTP method, full request path, request body, and other HTTP metadata</li>
+<li>The <code>hello</code> function parses that input and decides how to respond</li>
+<li>The <code>hello</code> function returns a json payload with the status code, headers, and the response body back to API Gateway</li>
+<li>API Gateway formats that response and returns it as a proper HTTP response back to the client</li>
+</ol>
+<p>Using Serverless Framework, we won’t have to worry about many of the particulars of this flow.</p>
+<h1 id="Configuring-the-Event"><a href="#Configuring-the-Event" class="headerlink" title="Configuring the Event"></a>Configuring the Event</h1><p>In our <code>serverless.yml</code>, we have the following for our function configuration:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="attr">functions:</span></div><div class="line"><span class="attr">  hello:</span></div><div class="line"><span class="attr">    handler:</span> CsharpHandlers::AwsDotnetCsharp.Handler::Hello</div></pre></td></tr></table></figure>
+<p>What we’re going to add to his is the <code>events</code> property for our <code>hello</code> function. Change this section to look like the following:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="attr">functions:</span></div><div class="line"><span class="attr">  hello:</span></div><div class="line"><span class="attr">    handler:</span> CsharpHandlers::AwsDotnetCsharp.Handler::Hello</div><div class="line"><span class="attr">    events:</span></div><div class="line"><span class="attr">      - http:</span> GET helloworld</div></pre></td></tr></table></figure>
+<p>That’s it!</p>
+<h1 id="Testing-the-Event-Take-1"><a href="#Testing-the-Event-Take-1" class="headerlink" title="Testing the Event (Take #1)"></a>Testing the Event (Take #1)</h1><p>Now that we’ve modified our service definition (<code>serverless.yml</code>), let’s remember what we need to do to deploy it. Note that since we haven’t made modifications to the C#, we don’t need to build an updated package.</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">serverless deploy</div></pre></td></tr></table></figure>
+<p>When that command completes, you should see some info in the “Service Information” output that wasn’t populated before (your subdomain will be different):</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="attr">endpoints:</span></div><div class="line">  GET - https://pya6b2f8i0.execute-api.us-east<span class="bullet">-1.</span>amazonaws.com/dev/helloworld</div></pre></td></tr></table></figure>
+<p>Neat! Here we see the API Gateway endpoint that <code>serverless</code> generated which should map to your function. Copy your URL (not the one posted above) and navigate to it in your browser. You’ll likely see the following:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&#123;<span class="attr">"message"</span>: <span class="string">"Internal server error"</span>&#125;</div></pre></td></tr></table></figure>
+<p>What gives? Well, the good news is that we didn’t get a browser error page, so we’re probably doing <em>something</em> right. Maybe the problem is with our function? Let’s see if our function works in API Gateway.</p>
+<h1 id="API-Gateway-console"><a href="#API-Gateway-console" class="headerlink" title="API Gateway console"></a>API Gateway console</h1><p>Since our HTTP resource, <code>/dev/helloworld</code>, is managed by API Gateway, we can look for a point of failure there. Log in to the AWS Console, and navigate to the “API Gateway” service.</p>
+<p>In API Gateway, you’ll see <code>dev-foo</code> listed under the <code>APIs</code> section. An “API” groups all the endpoints of your serverless service. If you click on <code>dev-foo</code>, you’ll see that we have one, <code>/helloworld</code> which supports the <code>GET</code> HTTP method. Clicking on <code>GET</code> under <code>/helloworld</code> brings us to the pipeline diagram for that specific action. It describes the request/response lifecycle of our endpoint:</p>
+<ol>
+<li>A client makes a HTTP request</li>
+<li>The request approaches the configured integration and is transformed to the format the integration prefers<ul>
+<li>An API integration is the thing that actually handles the request, in our case, a Lambda function</li>
+</ul>
+</li>
+<li>The integration receives the transformed request and performs some logic with it</li>
+<li>The integration returns a response to API Gateway</li>
+<li>The integration’s response is transformed into a HTTP response</li>
+<li>The client receives the HTTP response</li>
+</ol>
+<p>There’s a lot of opportunities for misconfiguration in that pipeline. Thankfully, API Gateway makes it easy to test resources. Click on “Test” on the “Client” box on the left. You’ll see a page that allows you to try out making requests to your resource with different query strings, headers, and request bodies (for supported HTTP verbs).</p>
+<p>Since we’re not doing anything special in our function with query strings or headers yet, leave everything blank and click “Test”.</p>
+<p>On the right side of the screen, you’ll see that we still the get the <code>&quot;Internal server error&quot;</code> message, but more helpfully, we have logs for all parts of the request pipeline.</p>
+<p>First, there’s a lot of information about the request, such as our empty body, headers and the like. Then, it shows the <code>body after transformation</code> which is the full batch of data which our Lambda function receives.</p>
+<p>Surprisingly, we then see the response body we expected with the <code>Go Serverless</code> message. Looks like our function didn’t fail after all. What <em>did</em> fail is the next step. A couple lines down, we see the following message:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">Execution failed due to configuration error: Malformed Lambda proxy response</div></pre></td></tr></table></figure>
+<p>Hrm. Looks like we didn’t format the output of our Lambda function the way that API Gateway was expecting. Diving deep in to the <a href="http://docs.aws.amazon.com/apigateway/latest/developerguide/api-gateway-set-up-simple-proxy.html#api-gateway-simple-proxy-for-lambda-output-format" target="_blank" rel="external">AWS documentation</a>, it was expecting a response of the following format:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    "statusCode": httpStatusCode,</div><div class="line">    "headers": &#123; "headerName": "headerValue", ... &#125;,</div><div class="line">    "body": "..."</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="Formatting-the-Function-Response"><a href="#Formatting-the-Function-Response" class="headerlink" title="Formatting the Function Response"></a>Formatting the Function Response</h1><p>To model the function output the way that API Gateway expects, we’ll need to start making some code changes. Yay!</p>
+<p>Delete the existing <code>Response</code> class and add the following class:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// The following usings will be required:</span></div><div class="line"><span class="keyword">using</span> System.Collections.Generic;</div><div class="line"><span class="keyword">using</span> Newtonsoft.Json;</div><div class="line"></div><div class="line"><span class="comment">// ... later</span></div><div class="line"></div><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Response</span></div><div class="line">&#123;</div><div class="line">    [JsonProperty(<span class="string">"statusCode"</span>)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">int</span> StatusCode &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line"></div><div class="line">    [JsonProperty(<span class="string">"headers"</span>)]</div><div class="line">    <span class="keyword">public</span> Dictionary&lt;<span class="keyword">string</span>, <span class="keyword">string</span>&gt; Headers &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line"></div><div class="line">    [JsonProperty(<span class="string">"body"</span>)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Body &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Here we see the three required properties represented: “statusCode”, “headers”, and “body”.</p>
+<h2 id="JsonProperty-and-Serialization"><a href="#JsonProperty-and-Serialization" class="headerlink" title="JsonProperty and Serialization"></a><code>JsonProperty</code> and Serialization</h2><p>One thing to clarify is the use of the <code>JsonProperty</code> attribute. API Gateway expects <code>camelCase</code> for all property names. However, idiomatic C# uses <code>PascalCase</code> for public properties. Because the Lambda Serializer is based on <a href="http://www.newtonsoft.com/json" target="_blank" rel="external">Json.NET</a>, we can use <code>JsonProperty</code> tell the serializer to do two things:</p>
+<ul>
+<li>When serializing the C# object with the <code>Body</code> property, name the json property <code>body</code></li>
+<li>When deserializing a json object, look for the property <code>body</code> and use it to populate the <code>Body</code> property in C#</li>
+</ul>
+<p>In a future post, we’ll go into more detail about serialization and look at easier ways to handle the mapping between idiomatic C# and idiomatic json.</p>
+<h2 id="Testing-the-New-Response"><a href="#Testing-the-New-Response" class="headerlink" title="Testing the New Response"></a>Testing the New Response</h2><p>To set the new response model, modify the <code>Hello</code> method as follows:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Response <span class="title">Hello</span>(<span class="params">Request request</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Response</div><div class="line">    &#123;</div><div class="line">        StatusCode = <span class="number">200</span>,</div><div class="line">        Headers = <span class="keyword">new</span> Dictionary&lt;<span class="keyword">string</span>, <span class="keyword">string</span>&gt;(),</div><div class="line">        Body = <span class="string">"Go Serverless! Hello from HTTP"</span>,</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Jump back to the command line and build and deploy the modified function:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">./build.ps1 # or ./build.sh</div><div class="line">serverless deploy</div></pre></td></tr></table></figure>
+<p>Try the endpoint URL in the browser again. You should now see the <code>Go Serverless! Hello from HTTP</code> message. Yay!</p>
+<p>But wait, what happened to the structure of our original message?</p>
+<h1 id="Complex-Response-Body"><a href="#Complex-Response-Body" class="headerlink" title="Complex Response Body"></a>Complex Response Body</h1><p>I cheated a little bit in the last code change to get the HTTP request working. Let’s get back to the original response data schema. Add the following class below the definition of <code>Response</code>.</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">ResponseBody</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> Message &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">    <span class="keyword">public</span> Request Request &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Also modify the <code>Hello</code> method again:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Response <span class="title">Hello</span>(<span class="params">Request request</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">var</span> responseBody = <span class="keyword">new</span> ResponseBody</div><div class="line">    &#123;</div><div class="line">        Message = <span class="string">"Go Serverless! Hello from HTTP!"</span>,</div><div class="line">        Request = request,</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Response</div><div class="line">    &#123;</div><div class="line">        StatusCode = <span class="number">200</span>,</div><div class="line">        Headers = <span class="keyword">new</span> Dictionary&lt;<span class="keyword">string</span>, <span class="keyword">string</span>&gt;(),</div><div class="line">        Body = JsonConvert.SerializeObject(responseBody),</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>What’s going on here? Well, remember that the <code>body</code> property of the response must be of type <code>string</code>? That means that we have to explicitly serialize our response body as a string.</p>
+<p>After another <code>./build.ps1</code> and <code>serverless deploy</code>, try your function in the browser again and you should get the following (though not as nicely formatted):</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"Message"</span>: <span class="string">"Go Serverless! Thanks for reading the first part of this series!"</span>,</div><div class="line">  <span class="attr">"Request"</span>: &#123;</div><div class="line">    <span class="attr">"Key1"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"Key2"</span>: <span class="literal">null</span>,</div><div class="line">    <span class="attr">"Key3"</span>: <span class="literal">null</span></div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h1 id="Using-Request-Data"><a href="#Using-Request-Data" class="headerlink" title="Using Request Data"></a>Using Request Data</h1><p>Neat! Now we know how to massage and structure our responses so that API Gateway can handle them. Since the move to using HTTP events, though, our example <code>Request</code> type hasn’t made a lot of sense. The data that comes through from the browser’s request and the API Gateway transformation doesn’t have any of <code>Key1</code>, <code>Key2</code>, or <code>Key3</code>, so those properties aren’t populated when Lambda attempts to serialize them.</p>
+<p>So what data <em>can</em> we use in our Lambda function? Since <code>GET</code> requests don’t have request bodies, let’s use query parameters.</p>
+<p>What will that look like? Instead of digging though the deep waters of AWS documentation, recall that the API Gateway resource test page logged what the transformed integration input looked like. If we add a query string to the test input, we can see what or function would get.</p>
+<p>Go to the API Gateway test page again and put <code>name=Ada</code> in the “Query String” field, then click “Test”. Take a look at the output labeled “Endpoint request body after transformations”:</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  "resource": "/foo",</div><div class="line">  "path": "/foo",</div><div class="line">  "httpMethod": "GET",</div><div class="line">  "headers": null,</div><div class="line">  "queryStringParameters": &#123;</div><div class="line">    "name": "ada"</div><div class="line">  &#125;,</div><div class="line">  // ...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>From this, it looks like it’ll be pretty straightforward to create a new <code>Request</code> class that models the integration request. Replace the exising <code>Request</code> class with the following:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="keyword">class</span> <span class="title">Request</span></div><div class="line">&#123;</div><div class="line">    [JsonProperty(<span class="string">"httpMethod"</span>)]</div><div class="line">    <span class="keyword">public</span> <span class="keyword">string</span> HttpMethod &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line"></div><div class="line">    [JsonProperty(<span class="string">"queryStringParameters"</span>)]</div><div class="line">    <span class="keyword">public</span> Dictionary&lt;<span class="keyword">string</span>, <span class="keyword">string</span>&gt; QueryStringParameters &#123; <span class="keyword">get</span>; <span class="keyword">set</span>; &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Note that we don’t have to have a property for everything we receive. All other properties will be silently ignored. With this <code>Request</code> class in place, modify the <code>Hello</code> method one last time to look like this:</p>
+<figure class="highlight csharp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Response <span class="title">Hello</span>(<span class="params">Request request</span>)</span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">var</span> name = <span class="string">"Jane Doe"</span>;</div><div class="line">    <span class="keyword">if</span> (request.QueryStringParameters != <span class="literal">null</span></div><div class="line">        &amp;&amp; request.QueryStringParameters.ContainsKey(<span class="string">"name"</span>))</div><div class="line">    &#123;</div><div class="line">        name = request.QueryStringParameters[<span class="string">"name"</span>];</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">var</span> responseBody = <span class="keyword">new</span> ResponseBody</div><div class="line">    &#123;</div><div class="line">        Message = <span class="string">$"Go Serverless! Hello <span class="subst">&#123;name&#125;</span> from HTTP!"</span>,</div><div class="line">        Request = request,</div><div class="line">    &#125;;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">new</span> Response</div><div class="line">    &#123;</div><div class="line">        StatusCode = <span class="number">200</span>,</div><div class="line">        Headers = <span class="keyword">new</span> Dictionary&lt;<span class="keyword">string</span>, <span class="keyword">string</span>&gt;(),</div><div class="line">        Body = JsonConvert.SerializeObject(responseBody),</div><div class="line">    &#125;;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>We want to default the name and not error if one is not provided. We saw earlier that <code>queryStringParameters</code> is null if there is no query string, so we need to check against that.</p>
+<p>After one last <code>./build.ps1</code> and <code>serverless deploy</code>, try your function out. You can test it like we were before, or you can add <code>?name=Ada</code>, and you’ll see a response like this:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">  <span class="attr">"Message"</span>: <span class="string">"Go Serverless! Hello ada from HTTP!"</span>,</div><div class="line">  <span class="attr">"Request"</span>: &#123;</div><div class="line">    <span class="attr">"method"</span>: <span class="string">"GET"</span>,</div><div class="line">    <span class="attr">"queryStringParameters"</span>: &#123;</div><div class="line">      <span class="attr">"name"</span>: <span class="string">"ada"</span></div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>Once again, well done! Next post, we’ll extend our function to handle HTTP POSTs and build a fully-functioning chat bot!</p>
+
+
+                
+            </div>
+
+            <!-- Comments -->
+            
+                <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                    
+
+
+                </div>
+            
+        </div>
+    </div>
+</article>
+
+    <!-- Footer -->
+    <hr />
+
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <ul class="list-inline text-center">
+                    
+                        <li>
+                            <a href="https://twitter.com/ryanastelly" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+                        <li>
+                            <a href="https://github.com/FLGMwt" target="_blank">
+                                <span class="fa-stack fa-lg">
+                                    <i class="fa fa-circle fa-stack-2x"></i>
+                                    <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+                                </span>
+                            </a>
+                        </li>
+                    
+
+                    
+
+                    
+
+                    
+                </ul>
+                <p class="copyright text-muted">&copy; 2017 Ryan Stelly<br></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+
+    <!-- After footer scripts -->
+    
+<!-- jQuery -->
+<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- Gallery -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/featherlight/1.3.5/featherlight.min.js" type="text/javascript" charset="utf-8"></script>
+
+<!-- Disqus Comments -->
+
+
+
+</body>
+
+</html>
